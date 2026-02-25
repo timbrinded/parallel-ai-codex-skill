@@ -1,4 +1,4 @@
-# OpenAPI Cheatsheet (Search + Task APIs)
+# OpenAPI Cheatsheet (Search + Extract + Task APIs)
 
 Use this file when you need exact endpoint paths, schema names, enums, or to diff Parallel API changes.
 
@@ -11,6 +11,10 @@ Use this file when you need exact endpoint paths, schema names, enums, or to dif
 ### Search
 
 - `POST /v1beta/search`
+
+### Extract
+
+- `POST /v1beta/extract`
 
 ### Task runs (v1)
 
@@ -36,9 +40,14 @@ Use this file when you need exact endpoint paths, schema names, enums, or to dif
 - `SearchRequest`
 - `SearchResponse`
 - `WebSearchResult`
+- `ExtractRequest`
+- `ExtractResponse`
+- `ExtractResult`
+- `ExtractError`
 - `SourcePolicy`
 - `ExcerptSettings`
 - `FetchPolicy`
+- `FullContentSettings`
 - `Warning`
 - `UsageItem`
 
@@ -95,14 +104,14 @@ List scoped paths:
 ```bash
 curl -s https://docs.parallel.ai/public-openapi.json \
   | jq -r '.paths | keys[]' \
-  | rg 'search|tasks'
+  | rg 'search|extract|tasks'
 ```
 
-Inspect Search request/response schemas:
+Inspect Search/Extract request/response schemas:
 
 ```bash
 curl -s https://docs.parallel.ai/public-openapi.json \
-  | jq '.components.schemas.SearchRequest, .components.schemas.SearchResponse'
+  | jq '.components.schemas.SearchRequest, .components.schemas.SearchResponse, .components.schemas.ExtractRequest, .components.schemas.ExtractResponse'
 ```
 
 Inspect Task beta fields and webhook schema:
@@ -131,7 +140,7 @@ curl -s https://docs.parallel.ai/public-openapi.json \
 
 - Compare endpoint paths for additions/removals.
 - Check `ParallelBeta` enum changes.
-- Check `SearchRequest` and `BetaTaskRunInput` field changes.
+- Check `SearchRequest`, `ExtractRequest`, and `BetaTaskRunInput` field changes.
 - Check event schema discriminator mappings for SSE changes.
 - Update examples and validators if schema semantics moved.
 
@@ -139,5 +148,6 @@ curl -s https://docs.parallel.ai/public-openapi.json \
 
 - Public OpenAPI Spec: https://docs.parallel.ai/public-openapi.json
 - API Reference (Search Beta): https://docs.parallel.ai/api-reference/search-beta/search
+- API Reference (Extract Beta): https://docs.parallel.ai/api-reference/extract-beta/extract
 - API Reference (Tasks v1): https://docs.parallel.ai/api-reference/tasks-v1/create-task-run
 - API Reference (Tasks Beta): https://docs.parallel.ai/api-reference/tasks-beta/create-task-group

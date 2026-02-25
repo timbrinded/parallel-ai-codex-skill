@@ -65,8 +65,8 @@ GENERATED_AT="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
   echo "Generated at (UTC): $GENERATED_AT"
   echo "Spec URL: $SPEC_URL"
   echo
-  echo "Scoped paths (search + tasks):"
-  jq -r '.paths | keys[] | select(test("^/v1(beta)?/search$|^/v1(beta)?/tasks"))' "$TMP_SPEC" | sort
+  echo "Scoped paths (search + extract + tasks):"
+  jq -r '.paths | keys[] | select(test("^/v1beta/(search|extract)$|^/v1(beta)?/tasks"))' "$TMP_SPEC" | sort
   echo
   echo "ParallelBeta enum (if present):"
   jq -r '
@@ -79,7 +79,7 @@ GENERATED_AT="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
     | .[] as $k
     | if (. | type) == "array" then $k else empty end
   ' /dev/null >/dev/null 2>&1 || true
-  for name in SearchRequest SearchResponse SourcePolicy BetaTaskRunInput TaskSpec TaskRun TaskRunResult TaskRunEvent TaskGroupRunRequest TaskGroupStatus Webhook; do
+  for name in SearchRequest SearchResponse ExtractRequest ExtractResponse ExtractResult ExtractError SourcePolicy ExcerptSettings FullContentSettings FetchPolicy BetaTaskRunInput TaskSpec TaskRun TaskRunResult TaskRunEvent TaskGroupRunRequest TaskGroupStatus Webhook; do
     if jq -e --arg name "$name" '.components.schemas[$name] != null' "$TMP_SPEC" >/dev/null; then
       echo "- $name"
     else

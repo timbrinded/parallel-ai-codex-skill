@@ -1,4 +1,4 @@
 interface:
-  display_name: "Parallel Task + Search API"
-  short_description: "Build and debug Parallel.ai Search and Task API integrations"
-  default_prompt: "Use this skill to implement or troubleshoot Parallel.ai Search API and Task API requests, schemas, SSE events, task groups, and webhook verification."
+  display_name: "Parallel Task + Search + Extract API"
+  short_description: "Build and debug Parallel.ai Search, Extract, and Task APIs"
+  default_prompt: "Use this skill to implement or troubleshoot Parallel.ai Search API, Extract API, and Task API requests, schemas, SSE events, task groups, and webhook verification."

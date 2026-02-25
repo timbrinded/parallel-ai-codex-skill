@@ -1,11 +1,11 @@
-# Parallel.ai Codex Skill (Search + Task API)
+# Parallel.ai Codex Skill (Search + Extract + Task API)
 
-This repository is a Codex skill focused on building and debugging integrations with the Parallel.ai Search API and Task API.
+This repository is a Codex skill focused on building and debugging integrations with the Parallel.ai Search API, Extract API, and Task API.
 
 It includes:
 
 - A production-ready `SKILL.md` for Codex skill triggering and workflow guidance
-- Curated references for Search, Task runs, SSE/task groups, and webhooks
+- Curated references for Search, Extract, Task runs, SSE/task groups, and webhooks
 - Utility scripts for payload validation, webhook signature verification, OpenAPI refresh, and optional live smoke tests
 - Tests for the bundled CLI scripts
 
@@ -14,7 +14,7 @@ It includes:
 Parallel.ai has a fast-moving API surface (beta headers, SSE features, evolving processors, schema details). This skill exists to give Codex a compact but high-signal workflow for:
 
 - Choosing the right Parallel endpoint and mode/processor
-- Building valid payloads (`SearchRequest`, `TaskSpec`, `SourcePolicy`, etc.)
+- Building valid payloads (`SearchRequest`, `ExtractRequest`, `TaskSpec`, `SourcePolicy`, etc.)
 - Debugging common failures (`422`, `408`, beta header mismatches)
 - Handling SSE streams and Task Groups correctly
 - Verifying Task webhook signatures safely using raw request bodies
@@ -23,7 +23,7 @@ Parallel.ai has a fast-moving API surface (beta headers, SSE features, evolving 
 
 - `SKILL.md`: Main Codex skill instructions (lean orchestration + pointers)
 - `agents/openai.yaml`: UI metadata for skill listing/chips
-- `references/`: Detailed docs and examples
+- `references/`: Detailed docs and examples (Search, Extract, Task)
 - `scripts/`: CLI helpers and optional smoke checks
 - `tests/`: CLI-level tests for the scripts
 
@@ -47,6 +47,7 @@ Typical installation options:
 Example trigger contexts:
 
 - “Implement Parallel Search API with source policy filters”
+- “Use Parallel Extract API to get focused excerpts/full content from URLs”
 - “Debug Parallel Task API `TaskSpec` 422 error”
 - “Stream Parallel task group events with SSE”
 - “Verify Parallel webhook signature in FastAPI/Node”
@@ -69,9 +70,11 @@ python3 -m unittest discover -s tests -v
 
 ```bash
 scripts/validate_search_payload.py --help
+scripts/validate_extract_payload.py --help
 scripts/validate_task_payload.py --help
 scripts/verify_webhook_signature.py --help
 scripts/smoke_search.py --help
+scripts/smoke_extract.py --help
 scripts/smoke_task_run.py --help
 scripts/refresh_openapi_snapshot.sh --help
 ```
@@ -88,6 +91,12 @@ Run Search smoke test:
 
 ```bash
 scripts/smoke_search.py --objective "What was the GDP of France in 2023?"
+```
+
+Run Extract smoke test:
+
+```bash
+scripts/smoke_extract.py --url https://www.example.com --full-content
 ```
 
 Run Task run smoke test:
@@ -121,12 +130,15 @@ Generated files (gitignored):
 - Parallel Public OpenAPI Spec: https://docs.parallel.ai/public-openapi.json
 - Search Quickstart: https://docs.parallel.ai/search/search-quickstart
 - Search Modes: https://docs.parallel.ai/search/modes
+- Extract Quickstart: https://docs.parallel.ai/extract/extract-quickstart
+- Extract Best Practices: https://docs.parallel.ai/extract/best-practices
 - Task Quickstart: https://docs.parallel.ai/task-api/task-quickstart
 - Task Processor Selection: https://docs.parallel.ai/task-api/guides/choose-a-processor
 - Task SSE: https://docs.parallel.ai/task-api/task-sse
 - Task Webhooks: https://docs.parallel.ai/task-api/webhooks
 - Webhook Setup / Signing: https://docs.parallel.ai/resources/webhook-setup
 - Search API Reference: https://docs.parallel.ai/api-reference/search-beta/search
+- Extract API Reference: https://docs.parallel.ai/api-reference/extract-beta/extract
 - Tasks v1 API Reference: https://docs.parallel.ai/api-reference/tasks-v1/create-task-run
 - Tasks Beta API Reference: https://docs.parallel.ai/api-reference/tasks-beta/create-task-group
 

@@ -1,4 +1,4 @@
-# Parallel.ai Overview (Search + Task API)
+# Parallel.ai Overview (Search + Extract + Task API)
 
 ## Purpose
 
@@ -20,6 +20,7 @@ Prefer SDKs for app integrations, but use raw HTTP/cURL when debugging exact hea
 ## Endpoint families covered by this skill
 
 - Search API (beta): `POST /v1beta/search`
+- Extract API (beta): `POST /v1beta/extract`
 - Task API v1 runs:
   - `POST /v1/tasks/runs`
   - `GET /v1/tasks/runs/{run_id}`
@@ -39,7 +40,7 @@ Parallel uses both versioned paths (`/v1`, `/v1beta`) and beta feature flags in 
 
 Examples visible in docs/OpenAPI include:
 
-- `search-extract-2025-10-10` (Search/Extract beta features)
+- `search-extract-2025-10-10` (Search and Extract beta features)
 - `events-sse-2025-07-24` (Task run SSE events / `enable_events`)
 - `mcp-server-2025-07-17` (Task MCP servers)
 - `webhook-2025-08-12` (Task webhooks)
@@ -55,7 +56,7 @@ Guideline:
 
 Docs list endpoint- and processor-specific quotas. Examples from the current rate-limit page include:
 
-- Search API: request and result-rate quotas (for example 300 RPM and 2000 results/min)
+- Search API and Extract API: endpoint-specific request/result quotas (check current rate-limit page)
 - Task API v1 create/retrieve endpoints: separate quotas by endpoint
 - Task API processor quotas differ by processor family (higher-end processors usually lower RPM)
 
@@ -79,7 +80,7 @@ Common errors across docs and OpenAPI examples:
 
 ## Research snapshot
 
-- Last curated for this skill: `2026-02-25`
+- Last curated for this skill: `2026-02-25` (includes Extract API support)
 - Refresh source of truth: `https://docs.parallel.ai/public-openapi.json` and linked docs pages
 
 ## Sources
@@ -87,4 +88,5 @@ Common errors across docs and OpenAPI examples:
 - Parallel Docs: https://docs.parallel.ai/
 - Public OpenAPI Spec: https://docs.parallel.ai/public-openapi.json
 - Rate Limits: https://docs.parallel.ai/getting-started/rate-limits
+- Extract Quickstart: https://docs.parallel.ai/extract/extract-quickstart
 - Warnings and Errors: https://docs.parallel.ai/resources/warnings-and-errors

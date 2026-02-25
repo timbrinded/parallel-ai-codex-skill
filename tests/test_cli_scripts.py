@@ -47,9 +47,11 @@ class ScriptHelpTests(unittest.TestCase):
     def test_python_scripts_help(self) -> None:
         for script in (
             "validate_search_payload.py",
+            "validate_extract_payload.py",
             "validate_task_payload.py",
             "verify_webhook_signature.py",
             "smoke_search.py",
+            "smoke_extract.py",
             "smoke_task_run.py",
         ):
             with self.subTest(script=script):
@@ -79,6 +81,32 @@ class SearchValidatorTests(unittest.TestCase):
         self.assertEqual(proc.returncode, 1)
         self.assertIn("ERROR", proc.stdout)
         self.assertIn("include_domains[0]", proc.stdout)
+
+
+class ExtractValidatorTests(unittest.TestCase):
+    def test_validate_extract_payload_valid(self) -> None:
+        payload = {
+            "urls": ["https://www.example.com"],
+            "objective": "Find pricing statements",
+            "excerpts": {"max_chars_per_result": 1500, "max_chars_total": 3000},
+            "full_content": {"max_chars_per_result": 8000},
+        }
+        proc = run_py(
+            "validate_extract_payload.py",
+            "--beta",
+            "search-extract-2025-10-10",
+            "-",
+            stdin=json.dumps(payload),
+        )
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.assertIn("OK", proc.stdout)
+
+    def test_validate_extract_payload_invalid_url(self) -> None:
+        payload = {"urls": ["example.com"], "excerpts": False, "full_content": False}
+        proc = run_py("validate_extract_payload.py", "-", stdin=json.dumps(payload))
+        self.assertEqual(proc.returncode, 1)
+        self.assertIn("ERROR", proc.stdout)
+        self.assertIn("$.urls[0]", proc.stdout)
 
 
 class TaskValidatorTests(unittest.TestCase):
@@ -185,7 +213,7 @@ class WebhookVerifierTests(unittest.TestCase):
 
 class SmokeSkipTests(unittest.TestCase):
     def test_smoke_scripts_skip_without_api_key(self) -> None:
-        for script in ("smoke_search.py", "smoke_task_run.py"):
+        for script in ("smoke_search.py", "smoke_extract.py", "smoke_task_run.py"):
             with self.subTest(script=script):
                 proc = run_py(script, "--api-key", "")
                 self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
