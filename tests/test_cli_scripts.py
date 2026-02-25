@@ -13,6 +13,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "scripts"
+FIXTURES = ROOT / "tests" / "fixtures"
 
 
 def run_py(script_name: str, *args: str, stdin: str | None = None) -> subprocess.CompletedProcess[str]:
@@ -60,6 +61,16 @@ class ScriptHelpTests(unittest.TestCase):
                 self.assertIn("usage:", proc.stdout.lower())
 
 
+class RefreshScriptTests(unittest.TestCase):
+    def test_refresh_openapi_uses_local_fixture_spec(self) -> None:
+        fixture_uri = (FIXTURES / "openapi-minimal.json").resolve().as_uri()
+        proc = run_sh("refresh_openapi_snapshot.sh", "--spec-url", fixture_uri)
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.assertIn("Scoped paths (search + extract + tasks):", proc.stdout)
+        self.assertIn("/v1beta/extract", proc.stdout)
+        self.assertIn("ExtractRequest", proc.stdout)
+
+
 class SearchValidatorTests(unittest.TestCase):
     def test_validate_search_payload_valid(self) -> None:
         payload = {
@@ -84,6 +95,16 @@ class SearchValidatorTests(unittest.TestCase):
 
 
 class ExtractValidatorTests(unittest.TestCase):
+    def test_validate_extract_payload_valid_from_fixture(self) -> None:
+        proc = run_py(
+            "validate_extract_payload.py",
+            "--beta",
+            "search-extract-2025-10-10",
+            str(FIXTURES / "extract-valid.json"),
+        )
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.assertIn("OK", proc.stdout)
+
     def test_validate_extract_payload_valid(self) -> None:
         payload = {
             "urls": ["https://www.example.com"],
@@ -107,6 +128,13 @@ class ExtractValidatorTests(unittest.TestCase):
         self.assertEqual(proc.returncode, 1)
         self.assertIn("ERROR", proc.stdout)
         self.assertIn("$.urls[0]", proc.stdout)
+
+    def test_validate_extract_payload_warns_no_content_and_missing_beta(self) -> None:
+        proc = run_py("validate_extract_payload.py", str(FIXTURES / "extract-no-content.json"))
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.assertIn("WARN", proc.stdout)
+        self.assertIn("both excerpts and full_content are disabled", proc.stdout)
+        self.assertIn("search-extract-2025-10-10", proc.stdout)
 
 
 class TaskValidatorTests(unittest.TestCase):

@@ -1,0 +1,60 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Parallel Minimal Fixture",
+    "version": "0.0.0-test"
+  },
+  "paths": {
+    "/v1beta/search": {},
+    "/v1beta/extract": {},
+    "/v1/tasks/runs": {},
+    "/v1/tasks/runs/{run_id}": {},
+    "/v1/tasks/runs/{run_id}/result": {},
+    "/v1beta/tasks/groups": {},
+    "/v1beta/tasks/groups/{taskgroup_id}/events": {}
+  },
+  "components": {
+    "schemas": {
+      "ParallelBeta": {
+        "anyOf": [
+          {
+            "enum": [
+              "search-extract-2025-10-10",
+              "events-sse-2025-07-24"
+            ],
+            "type": "string"
+          }
+        ]
+      },
+      "SearchRequest": {},
+      "SearchResponse": {},
+      "ExtractRequest": {},
+      "ExtractResponse": {},
+      "ExtractResult": {},
+      "ExtractError": {},
+      "SourcePolicy": {},
+      "ExcerptSettings": {},
+      "FullContentSettings": {},
+      "FetchPolicy": {},
+      "BetaTaskRunInput": {},
+      "TaskSpec": {},
+      "TaskRun": {
+        "properties": {
+          "status": {
+            "enum": [
+              "queued",
+              "running",
+              "completed",
+              "failed"
+            ]
+          }
+        }
+      },
+      "TaskRunResult": {},
+      "TaskRunEvent": {},
+      "TaskGroupRunRequest": {},
+      "TaskGroupStatus": {},
+      "Webhook": {}
+    }
+  }
+}

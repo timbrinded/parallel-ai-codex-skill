@@ -1,0 +1,17 @@
+{
+  "urls": [
+    "https://www.example.com"
+  ],
+  "objective": "Find pricing statements",
+  "search_queries": [
+    "pricing",
+    "enterprise plan"
+  ],
+  "excerpts": {
+    "max_chars_per_result": 1500,
+    "max_chars_total": 3000
+  },
+  "full_content": {
+    "max_chars_per_result": 8000
+  }
+}
