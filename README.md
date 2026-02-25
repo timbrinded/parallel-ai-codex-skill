@@ -56,7 +56,7 @@ Example trigger contexts:
 ### Structural validation (skill format)
 
 ```bash
-python3 /Users/timbo/.codex/skills/.system/skill-creator/scripts/quick_validate.py .
+python3 "${CODEX_HOME:-$HOME/.codex}"/skills/.system/skill-creator/scripts/quick_validate.py .
 ```
 
 ### Run tests
