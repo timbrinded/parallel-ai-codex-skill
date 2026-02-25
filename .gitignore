@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+references/generated/public-openapi.json
+references/generated/openapi-summary.txt
